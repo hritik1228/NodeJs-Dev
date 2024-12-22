@@ -1,4 +1,4 @@
-// console.group(5+6)
+console.group("Sum module executed")
 
 
 function caluculateSum(a,b){
