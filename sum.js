@@ -1,13 +1,12 @@
 console.group("Sum module executed")
 
-
-export function caluculateSum(a,b){
+function caluculateSum(a,b){
     const sum=a+b;
     console.log(sum)
 }
 
 var x=100;
-export var greet="Good Evening"
+// var greet="Good Evening"
 
 // module.exports=caluculateSum;
 
@@ -15,6 +14,11 @@ export var greet="Good Evening"
 //     x:x,
 //     caluculateSum:caluculateSum,
 // }
+
+console.log(module.exports)
+
+module.exports.x=x;
+module.exports.caluculateSum=caluculateSum;
 
 // module.exports={
 //     x,
