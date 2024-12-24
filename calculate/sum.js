@@ -5,7 +5,7 @@ function caluculateSum(a,b){
     console.log(sum)
 }
 
-var x=100;
+// var x=100;
 // var greet="Good Evening"
 
 // module.exports=caluculateSum;
@@ -15,10 +15,10 @@ var x=100;
 //     caluculateSum:caluculateSum,
 // }
 
-console.log(module.exports)
+// console.log(module.exports)
 
-module.exports.x=x;
-module.exports.caluculateSum=caluculateSum;
+// module.exports.x=x;
+module.exports={caluculateSum};
 
 // module.exports={
 //     x,
