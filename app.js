@@ -21,10 +21,11 @@
 // import { caluculateSum,greet } from "./sum.js";
 
 const {calculateMultiply,caluculateSum}=require('./calculate');
+const data=require('./data.json');
 
 var myName="Hritik Kumar";
 console.log(myName)
-
+console.log(data)
 // this works now
 // obj.caluculateSum(5,3)
 calculateMultiply(5,4)
