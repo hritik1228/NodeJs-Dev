@@ -33,3 +33,25 @@ caluculateSum(5,3)
 
 // console.log(greet)
 // console.log(obj.x)
+
+// How are variable and functions private in different modules?
+// require('./path)
+// All the code of the module is wrapped inside a function
+// this is normal function it's known as IIFE -> Immediately Invoked Function Expression
+
+(function (){
+    // All the code of the module runs inside this function
+})();
+
+// IIFE
+// It immediately invoke the code
+// It keeps your variable and functions safe, the code will not interfere same variable name outside the IIFE can be set 
+
+
+// How do you get access to module.exports?
+// Nodejs passess module as a parameter to the IIFE
+// (function (module,require){
+
+// })();
+
+
