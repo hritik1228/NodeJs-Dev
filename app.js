@@ -54,4 +54,12 @@ caluculateSum(5,3)
 
 // })();
 
+// 5 steps mechanism for require
+
+// 1. Resolve - Node.js resolves the module's file path.
+// 2. Load - It loads the module based on its type (JavaScript, JSON, or binary)-> get the data.
+// 3. Wrap - The module code is wrapped in a function to provide module-level scope.
+// 4. Execute - The wrapped function is executed, exporting values via module.exports. 
+// 5. Cache - The loaded module is cached to avoid reloading it again.
+
 

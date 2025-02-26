@@ -1,0 +1,23 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hritik1228/NodeJs-Dev.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hritik1228/NodeJs-Dev/issues"
+  },
+  "homepage": "https://github.com/hritik1228/NodeJs-Dev#readme",
+  "dependencies": {
+    "mongodb": "^6.13.1"
+  }
+}
