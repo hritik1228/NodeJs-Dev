@@ -2,43 +2,58 @@ const express=require("express");
 
 const app=express()
 
-// This will only match the GET HTTP Method API calls to /home
-app.get("/user",(request,response)=>{
+
+// ab?c -> it can be ac or abc -> Over here it means "b" is optional
+// ab*c -> it can be ac,abc,abbc,abbbc,abbbbc,..... -> Over here it means "b" can be 0 or more times
+// ab+c -> it can be abc,abbc,abbbc,abbbbc,..... -> Over here it means "b" can be 1 or more times
+// ab{2,4}c -> it can be abbc,abbbc,abbbbc -> Over here it means "b" can be 2 to 4 times
+// ab*c -> it can be ac,abc,abbc,abbbc,abbbbc,..... -> Over here it means "b" can be 0 or more times
+// a(bc)d -> it can be abcd -> Over here it means "bc" is optional
+// a(bc)+d -> it can be abcd,abcbcd,abcbcbcd,..... -> Over here it means "bc" can be 1 or more times
+app.get("/ab?c",(request,response)=>{
     response.send({
         firstName:"Hritik",
         lastName:"Kumar"
     })
 })
 
-app.post("/user",(request,response)=>{
-    // Logic to save/connect to the database
+// Regex
+// /a/ -> it can be a -> Over here it means "a" is mandatory -> if "a" is not there then it will not work
+// /.*fly$/ -> it can be butterfly,dragonfly,housefly,..... -> Over here it means it should end with "fly"
+app.get("/a/",(request,response)=>{
     response.send({
-        message:"User Created Successfully"
+        firstName:"Hritik",
+        lastName:"Kumar"
     })
 })
 
-app.delete("/user",(request,response)=>{
-    // Logic to delete from the database
+
+// Query Parameters
+// http://localhost:3000/user?name=Hritik&age=21
+// http://localhost:3000/user?name=Hritik
+
+app.get("/user",(request,response)=>{
+    // To get the query parameters
+    console.log(request.query)
     response.send({
-        message:"User Deleted Successfully"
+        firstName:"Hritik",
+        lastName:"Kumar"
     })
 })
 
-app.patch("/user",(request,response)=>{
-    // Update data to the database
+// Dynamic Parameters
+// http://localhost:3000/user/101
+// Many Dynamic Parameters
+// http://localhost:3000/user/101/102/103/104
+
+app.get("/user/:id",(request,response)=>{
+    // To get the dynamic parameters
+    console.log(request.params)
     response.send({
-        message:"User Updated Successfully"
+        firstName:"Hritik",
+        lastName:"Kumar"
     })
 })
-
-// This will match all the HTTP Methods API calls to /test
-app.use("/test",(request,response)=>{
-    response.send("Hello World from the test server!!")
-})
-
-// app.use((request,response)=>{
-//     response.send("Hello World from the server!!")
-// })
 
 app.listen(3000,()=>{
     console.log("Server is running on port 3000")
