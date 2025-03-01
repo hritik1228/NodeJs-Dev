@@ -2,25 +2,36 @@ const express=require("express");
 
 const app=express()
 
-
-// Orders of the routes matters a lot
-
-app.use("/",(request,response)=>{
-    response.send("Home page of the server!!")
+// This will only match the GET HTTP Method API calls to /home
+app.get("/user",(request,response)=>{
+    response.send({
+        firstName:"Hritik",
+        lastName:"Kumar"
+    })
 })
 
-app.use("/hello/hello",(request,response)=>{
-    response.send("hello hello hello")
+app.post("/user",(request,response)=>{
+    // Logic to save/connect to the database
+    response.send({
+        message:"User Created Successfully"
+    })
 })
 
-app.use("/hello",(request,response)=>{
-    response.send("hello hello")
+app.delete("/user",(request,response)=>{
+    // Logic to delete from the database
+    response.send({
+        message:"User Deleted Successfully"
+    })
 })
 
-app.use("/profile",(request,response)=>{
-    response.send("Your profile looks good & optimized!")
+app.patch("/user",(request,response)=>{
+    // Update data to the database
+    response.send({
+        message:"User Updated Successfully"
+    })
 })
 
+// This will match all the HTTP Methods API calls to /test
 app.use("/test",(request,response)=>{
     response.send("Hello World from the test server!!")
 })
