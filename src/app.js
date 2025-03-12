@@ -26,39 +26,31 @@ app.get("/api",(req,res,next)=>{
 // Middlewares are functions that have access to the request object (req), the response object (res), and the next function in the application’s request-response cycle.
 // The next function is a function in the Express router which, when invoked, executes the middleware succeeding the current middleware.
 // Give an example of middleware
-app.use((req,res,next)=>{
-    console.log("Middleware 1")
-    next()
-})
+// app.use((req,res,next)=>{
+//     console.log("Middleware 1")
+//     next()
+// })
 
 // Handle auth middleware for all requests GET,POST,PUT,DELETE
 app.use("/admins",(req,res,next)=>{
-    
-    
+    console.log("Admin auth is getting checked")
+    const token="xyz";
+    const isAuthorized=token==="xyz";
+    if(!isAuthorized){
+        res.status(401).send("Unauthorized request")
+    }else{
+        next()
+    }
 })
 
 // What is use of middleware?
 app.get("/admins/getAllData",(req,res,next)=>{
-    // Logic of checking if the request is authorized
-    // Logic of fetching all data of admins
-    // if this authorization code is required in different routes then we have to write this code in every route
-    // So, we can use middleware to avoid this
-
-    const token=xyz;
-    const isAuthorized=token==="xyz";
-    if(isAuthorized){
-        res.send("All data sent")
-    }
-    else{
-        res.status(401).send("Unauthorized request")
-    }
-    // res.send("Route Handler 3")
+    // Once the request is authorized then only this route handler will be executed
+    res.send("All data sent")
 })
 
 app.get("/admins/deleteUser",(req,res,next)=>{
-    // Logic of checking if the request is authorized
-    // Logic of deleting a user
-    console.log("Handler 4")
+    // Once the request is authorized then only this route handler will be executed
     res.send("Deleted a user")
 })
 
