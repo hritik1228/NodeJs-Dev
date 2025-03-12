@@ -2,6 +2,7 @@ const express=require("express");
 
 const app=express()
 
+const {adminAuth,userAuth}=require("../middlewares/auth")
 
 // Another way to define route handler 
 // Order of route handler is important
@@ -32,16 +33,19 @@ app.get("/api",(req,res,next)=>{
 // })
 
 // Handle auth middleware for all requests GET,POST,PUT,DELETE
-app.use("/admins",(req,res,next)=>{
-    console.log("Admin auth is getting checked")
-    const token="xyz";
-    const isAuthorized=token==="xyz";
-    if(!isAuthorized){
-        res.status(401).send("Unauthorized request")
-    }else{
-        next()
-    }
+app.use("/admins",adminAuth)
+
+// Over here the userAuth middleware is not required for the login route
+// So we can skip the userAuth middleware for the login route
+app.use("/users/login",(req,res,next)=>{
+    res.send("User login")
 })
+
+// Handle userAuth middleware for all requests GET,POST,PUT,DELETE
+app.use("/users",userAuth,(req,res,next)=>{
+    res.send("User data sent")
+})
+
 
 // What is use of middleware?
 app.get("/admins/getAllData",(req,res,next)=>{
