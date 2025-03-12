@@ -2,59 +2,65 @@ const express=require("express");
 
 const app=express()
 
-// What if no response is sent?
-// If no response is sent from server, the browser will keep loading the page and will show loading spinner and in postman it will keep loading.
-// To avoid this, we should always send a response from the server.
 
-app.get("/about",(req,res)=>{
-    console.log("Hello from the server")
+// Another way to define route handler 
+// Order of route handler is important
+// If we change the order of route handler then output will be different
+
+app.get("/api",(req,res,next)=>{
+    console.log("Handler 1")
+    // res.send("Route Handler 1")
+    next()
 })
 
-// One route can also have multiple routes handler
-// Currently it will shows the response from 1st handler only
-// To show the response from 2nd handler, we need to send the response from 1st handler
-app.get("/user",(req,res,next)=>{
-    console.log("Handling the request 1")
-    // If we are not sending the response from here then the browser will keep loading the page and will show loading spinner and in postman it will keep loading.
-    // res.send("1st Response")
-    // next() will call the next handler if we are not sending the response from here
-    next()
-
-    // Cannot set headers after they are sent to the client Explain?
-    // If we are sending the response from here and then calling next() then it will throw an error as we cannot send the response again.
-    // Javascript is single threaded and it will execute the code line by line.
-},(req,res)=>{
-    console.log("Handling the request 2")
-    res.send("2nd Response")
+app.get("/api",(req,res,next)=>{
+    console.log("Handler 2")
+    res.send("Route Handler 2")
 })
 
+// What happens when a request comes to the express?
+// When a request comes to the express, it goes through the middleware stack.
+// The middleware stack is a series of functions that are executed in the order they are defined.
+// The request goes through each middleware function in the stack until it reaches the route handler that sends a response back to the client.
 
-// Explain the output of the below code?
-// How? The code is written in the way that it will call the next handler in the chain.
-// So, it will call the next handler in the chain and will send the response from the 4th handler.
-app.get("/register",(req,res,next)=>{
-    console.log("Handling the request 1")
-    // res.send("1st Response")
+// Middlewares are functions that have access to the request object (req), the response object (res), and the next function in the application’s request-response cycle.
+// The next function is a function in the Express router which, when invoked, executes the middleware succeeding the current middleware.
+// Give an example of middleware
+app.use((req,res,next)=>{
+    console.log("Middleware 1")
     next()
-},(req,res,next)=>{
-    console.log("Handling the request 2")
-    // res.send("2nd Response")
-    next()
-},(req,res,next)=>{
-    console.log("Handling the request 3")
-    // res.send("3rd Response")
-    next()
-},(req,res,next)=>{
-    console.log("Handling the request 4")
-    // res.send("4th Response")
-    // next()
-    // what if we call next() here?
-    // If we call next() here then it will throw an error as there is no next handler in the chain.
 })
 
-// Route handler can also be written in an array
-// This is the way to write the route handler in an array
-// app.use("/route",[rH1,rH2,rH3],rH4,rH5,rH6,rH7)
+// Handle auth middleware for all requests GET,POST,PUT,DELETE
+app.use("/admins",(req,res,next)=>{
+    
+    
+})
+
+// What is use of middleware?
+app.get("/admins/getAllData",(req,res,next)=>{
+    // Logic of checking if the request is authorized
+    // Logic of fetching all data of admins
+    // if this authorization code is required in different routes then we have to write this code in every route
+    // So, we can use middleware to avoid this
+
+    const token=xyz;
+    const isAuthorized=token==="xyz";
+    if(isAuthorized){
+        res.send("All data sent")
+    }
+    else{
+        res.status(401).send("Unauthorized request")
+    }
+    // res.send("Route Handler 3")
+})
+
+app.get("/admins/deleteUser",(req,res,next)=>{
+    // Logic of checking if the request is authorized
+    // Logic of deleting a user
+    console.log("Handler 4")
+    res.send("Deleted a user")
+})
 
 app.listen(3000,()=>{
     console.log("Server is running on port 3000")
