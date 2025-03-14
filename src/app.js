@@ -1,7 +1,27 @@
 const express=require("express");
 const connectDB=require("./config/database")
-
+const User=require("./models/user")
 const app=express()
+
+app.post("/signup",async(req,res)=>{
+
+    const userObj={
+        firstName:"Hritik",
+        lastName:"Kumar",
+        emailId:"hritik@kumar.gmail.com",
+        password:"hritik@123"
+    }
+
+    try{
+        // Creating a new instance of the user model
+        const user = new User(userObj);
+        await user.save();
+        res.send("User added successfully");
+    }catch(err){
+        res.status(400).send("Error in adding user:",err.message);
+    }
+
+})
 
 // First of all connect to database & then listen to the port/incoming request
 // Once your database connection is successfully established then only do app.listen
