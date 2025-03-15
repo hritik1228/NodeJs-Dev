@@ -9,6 +9,38 @@ const app=express()
 // When a client (e.g., a frontend app) sends data to your Express server using POST or PUT, the data is usually in JSON format. However, Express does not automatically understand JSON. express.json() helps Express convert the incoming JSON data into a JavaScript object so you can easily use it in your code.
 app.use(express.json())
 
+// Get user by firstName
+app.get("/user",async(req,res)=>{
+    const userFirstName=req.body.firstName;
+    try{
+        const user=await User.find({firstName:userFirstName});
+        // const user=await User.findOne({firstName:userFirstName});
+        if(user.length===0){
+            res.status(400).send("User not found");
+        }else{
+            res.send(user);
+        }
+    }
+    catch(err){
+        res.status(400).send("Error in fetching user:",err.message);
+    }
+})
+
+// Feed API - GET/feed - get all the users from the database
+app.get("/feed",async(req,res)=>{
+    try{
+        const users=await User.find({});
+        if(users.length===0){
+            res.status(400).send("No users found");
+        }
+        else{
+            res.send(users);
+        }
+    }catch(err){
+        res.status(400).send("Error in fetching feed:",err.message);
+    }
+})
+
 app.post("/signup",async(req,res)=>{
 
     
