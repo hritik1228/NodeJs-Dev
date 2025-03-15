@@ -6,10 +6,10 @@ const app=express()
 app.post("/signup",async(req,res)=>{
 
     const userObj={
-        firstName:"Hritik",
-        lastName:"Kumar",
-        emailId:"hritik@kumar.gmail.com",
-        password:"hritik@123"
+        firstName:"Khushi",
+        lastName:"Kumari",
+        emailId:"khushi@kumari.gmail.com",
+        password:"khushi@123"
     }
 
     try{
