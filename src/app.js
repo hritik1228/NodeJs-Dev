@@ -65,6 +65,35 @@ app.post("/signup",async(req,res)=>{
 
 })
 
+// Find By Id and delete the user
+app.delete("/user",async(req,res)=>{
+    const userId=req.body.userId;
+
+    try{
+        // const user=await User.findByIdAndDelete({_id:userId});
+        // Shorthand of the above one   
+        const user=await User.findByIdAndDelete(userId);
+        res.send("User deleted successfully");
+    }catch(err){
+        res.status(400).send("Error in deleting user:",err.message);
+    }
+})
+
+// Update data of the user -> findByIdAndUpdate & findOneAndUpdate both are equivalent 
+// If it is not present in the schema then it will not update
+app.patch("/user",async(req,res)=>{
+    const userId = req.body.userId;
+    const data = req.body;
+    try{
+        const user = await User.findByIdAndUpdate({_id:userId},data,{returnDocument:"before"});
+        console.log(user);
+        res.send("User updated successfully");
+    }catch(err){
+        res.status(400).send("Error in updating user:",err.message);
+    }
+})
+
+
 // First of all connect to database & then listen to the port/incoming request
 // Once your database connection is successfully established then only do app.listen
 
