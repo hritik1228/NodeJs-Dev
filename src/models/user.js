@@ -30,6 +30,7 @@ const userSchema=new mongoose.Schema({
     gender:{
         type:String,   
         // It will only be called when the data is inserted on updation it won't be called
+        // To validate the data on updation we need to use runValidators:true
         validate(value){
             if(!["male","female","others"].includes(value)){    
                 throw new Error("Gender data is not valid");
@@ -46,8 +47,7 @@ const userSchema=new mongoose.Schema({
     skills:{
         type:[String],
     }
-
-})
+},{timestamps:true});
 
 // User is the model name-> it should be in capital letter
 // userSchema is the schema name
