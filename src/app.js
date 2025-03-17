@@ -81,10 +81,21 @@ app.delete("/user",async(req,res)=>{
 
 // Update data of the user -> findByIdAndUpdate & findOneAndUpdate both are equivalent 
 // If it is not present in the schema then it will not update
-app.patch("/user",async(req,res)=>{
-    const userId = req.body.userId;
+app.patch("/user/:userId",async(req,res)=>{
+    const userId = req.params.userId;
     const data = req.body;
+
     try{
+        const ALLOWED_UPDATES=["photoUrl","about","gender","age","skills"];
+
+        const isUpdateAllowed= Object.keys(data).every((k)=>
+                ALLOWED_UPDATES.includes(k)
+        );
+
+        if(!isUpdateAllowed){
+            return res.status(400).send("UPDATE FAILED: Updates not allowed");
+        }
+
         const user = await User.findByIdAndUpdate(
             {
                 _id:userId
