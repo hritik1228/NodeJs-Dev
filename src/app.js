@@ -82,7 +82,7 @@ app.delete("/user",async(req,res)=>{
 // Update data of the user -> findByIdAndUpdate & findOneAndUpdate both are equivalent 
 // If it is not present in the schema then it will not update
 app.patch("/user/:userId",async(req,res)=>{
-    const userId = req.params.userId;
+    const userId = req.params?.userId;
     const data = req.body;
 
     try{
@@ -94,6 +94,10 @@ app.patch("/user/:userId",async(req,res)=>{
 
         if(!isUpdateAllowed){
             return res.status(400).send("UPDATE FAILED: Updates not allowed");
+        }
+
+        if(data?.skills.length>10){
+            return res.status(400).send("UPDATE FAILED: Skills cannot be more than 10");
         }
 
         const user = await User.findByIdAndUpdate(
