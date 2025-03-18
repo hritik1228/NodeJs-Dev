@@ -1,4 +1,5 @@
 const mongoose=require("mongoose");
+const validator=require("validator");
 
 // Data Sanitization & Schema Validation
 
@@ -18,10 +19,21 @@ const userSchema=new mongoose.Schema({
         unique:true,
         trim:true,
         lowercase:true,
+        maxlength: 254,
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error("Invalid Email Address");  
+            }
+        }
     },
     password:{
         type:String,
         required:true,
+        validate(value){
+            if(!validator.isStrongPassword(value)){
+                throw new Error("Enter strong password");  
+            }
+        }
     },
     age:{
         type:Number,
@@ -39,6 +51,11 @@ const userSchema=new mongoose.Schema({
     },
     photoUrl:{
         type:String,
+        validate(value){
+            if(!validator.isURL(value)){
+                throw new Error("Invalid Photo URL");  
+            }
+        }
     },
     about:{
         type:String,
