@@ -45,30 +45,25 @@ app.get("/feed",async(req,res)=>{
 
 app.post("/signup",async(req,res)=>{
 
-    
-    // console.log(req.body)
-
-    // const userObj={
-    //     firstName:"Khushi",
-    //     lastName:"Kumari",
-    //     emailId:"khushi@kumari.gmail.com",
-    //     password:"khushi@123"
-    // }
-
     try{
         // Creating a new instance of the user model
         // const user = new User(userObj);
+
+        const {firstName,lastName,emailId,password} = req.body;
         // Validation of data
 
         validateSignUpData(req);
 
         // Encrypt the password
-        const {password} = req.body;
+        
         // Saltrounds -> the more the number of rounds the tougher it is to crack the password
-        const passwordHash = bcrypt.hash
+        const passwordHash = await bcrypt.hash(password,10);
+        console.log(passwordHash)
 
         
-        const user = new User(req.body);
+        const user = new User({
+            firstName,lastName,emailId,password:passwordHash
+        });
         await user.save();
         res.send("User added successfully");
     }catch(err){
