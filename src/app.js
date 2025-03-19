@@ -1,6 +1,8 @@
 const express=require("express");
 const connectDB=require("./config/database")
 const User=require("./models/user")
+const {validateSignUpData}=require("../src/utils/validation"); 
+const bcrypt = require("bcrypt");
 const app=express()
 
 // this middleware is used to parse the incoming request with JSON payloads 
@@ -56,11 +58,21 @@ app.post("/signup",async(req,res)=>{
     try{
         // Creating a new instance of the user model
         // const user = new User(userObj);
+        // Validation of data
+
+        validateSignUpData(req);
+
+        // Encrypt the password
+        const {password} = req.body;
+        // Saltrounds -> the more the number of rounds the tougher it is to crack the password
+        const passwordHash = bcrypt.hash
+
+        
         const user = new User(req.body);
         await user.save();
         res.send("User added successfully");
     }catch(err){
-        res.status(400).json({ error: "Error in adding user", message: err.message });
+        res.status(400).send("Error: " + err.message);
     }
 
 })
