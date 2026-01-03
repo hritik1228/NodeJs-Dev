@@ -2,30 +2,25 @@ const express = require('express');
 
 const app = express();
 
-// When a request is made to the server, send "Hello from the Node.js server!" as the response
-// app.use((req,res)=>{
-//     res.send('Hello from the Node.js server!');
-// })
-
-// what does '/' mean here?
-// Anything matches '/' will be handled by this route handler
-// app.use('/', (req, res) => {
-//     res.send('Welcome to the Home Page!');
-// });
-
-// route handler for all incoming requests
-app.use('/test',(req,res)=>{
-    res.send('This is the test route');
-})
-
-app.use('/hello',(req,res)=>{
-    res.send('Hello Hello from the Node.js server!');
+// This will only handle GET call to /user
+app.get('/user', (req, res) => {
+  res.send({firstName: 'Hritik', lastName: 'Kumar'});
 });
 
-// Does the sequence of route handlers matter?
-// Yes, the sequence matters. The first matching route handler will be executed.
-app.use('/', (req, res) => {
-    res.send('Welcome to the Home Page!');
+// 
+app.post('/user', (req, res) => {
+  console.log('Save the data to the database');
+  res.send("Data successfully saved to the database");
+});
+
+app.delete('/user', (req, res) => {
+  console.log('Delete the user from the database');
+  res.send("User successfully deleted from the database");
+});
+
+// This will match all the HTTP methods API calls to /test
+app.use('/test', (req, res) => {
+  res.send('This is the test route');
 });
 
 app.listen(3000, () => {
@@ -46,6 +41,10 @@ This code sets up a basic web server using the Express framework in Node.js. It 
 - When a request is made, Express checks each route handler in sequence until it finds one that matches the request path.
 - Once a matching route handler is found, it executes that handler and ignores any subsequent handlers.
 - Therefore, more specific routes should be defined before more general ones to ensure they are matched correctly.
+
+* HTTP Methods:
+- The code above uses the `app.use()` method, which is a general-purpose method for handling all HTTP methods (GET, POST, PUT, DELETE, etc.) for the specified path.
+- If you want to handle specific HTTP methods, you can use methods like `app.get()`, `app.post()`, `app.put()`, and `app.delete()`.
 
 * Additional Information:
 - Express.js is a popular web framework for Node.js that simplifies the process of building web applications and APIs.
