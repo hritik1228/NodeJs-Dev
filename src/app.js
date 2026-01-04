@@ -1,31 +1,26 @@
 const express = require('express');
+const {adminAuth} = require('./middlewares/auth')
+const {userAuth} = require('./middlewares/auth')
 
 const app = express(); 
 
-// Handle Auth middleware for all get,post,delete,put request
-app.use('/admin',(req,res,next)=>{
-  console.log('Auth Middleware executed');
-  const token = 'xyzdfgd';
-  const isAuthorized = token === 'xyz';
-  if(!isAuthorized){
-    res.status(401).send('Forbidden: Unauthorized access');
-  }
-  else{
-    next();
-  }
+app.use('/admin',adminAuth);
+// app.use('/user',userAuth);
+
+app.post('/user/login',(req,res)=>{
+  res.send('User logged in successfully');
 });
 
-app.get('/users',(req,res,next)=>{
+app.get('/user',userAuth,(req,res,next)=>{
   res.send('User list sent');
 });
 
 app.get('/admin/getAllData',(req,res,next)=>{
-  res.send("User Data sent")
- 
+  res.send("Admin Data sent")
 });
 
 app.get('/admin/deleteAllData',(req,res,next)=>{
-  res.send('User data deleted')
+  res.send('Admin data deleted')
 });
 
 
