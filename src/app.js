@@ -1,28 +1,32 @@
 const express = require('express');
-const {adminAuth} = require('./middlewares/auth')
-const {userAuth} = require('./middlewares/auth')
+
 
 const app = express(); 
 
-app.use('/admin',adminAuth);
-// app.use('/user',userAuth);
+// app.use('/', (err, req, res, next) => {
+//   if(err){
+//     // Log your error details here
+//     res.status(500).send('Something went wrong!');
+//   }
+// });
 
-app.post('/user/login',(req,res)=>{
-  res.send('User logged in successfully');
+app.get('/getUserData', (req, res) => {
+  // Logic of DB Call and get user data
+  console.log('Before the error')
+  throw new Error('Database connection failed');
+  console.log('After the error')
+  res.send('User Data Sent Successfully');
+  
 });
 
-app.get('/user',userAuth,(req,res,next)=>{
-  res.send('User list sent');
+// error handling middleware, err should be the first parameter (err, req, res, next)
+app.use('/', (err, req, res, next) => {
+  if(err){
+    // Log your error details here
+    res.status(500).send('Something went wrong!');
+  }
+  
 });
-
-app.get('/admin/getAllData',(req,res,next)=>{
-  res.send("Admin Data sent")
-});
-
-app.get('/admin/deleteAllData',(req,res,next)=>{
-  res.send('Admin data deleted')
-});
-
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
