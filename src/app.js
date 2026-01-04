@@ -1,18 +1,31 @@
 const express = require('express');
 
-const app = express();
+const app = express(); 
 
-// Ways to define route handlers in Express
-app.get('/user',(req,res,next)=>{
-  console.log("First Middleware");
-  next();
+// Handle Auth middleware for all get,post,delete,put request
+app.use('/admin',(req,res,next)=>{
+  console.log('Auth Middleware executed');
+  const token = 'xyzdfgd';
+  const isAuthorized = token === 'xyz';
+  if(!isAuthorized){
+    res.status(401).send('Forbidden: Unauthorized access');
+  }
+  else{
+    next();
+  }
 });
 
-app.get('/user',(req,res,next)=>{
-  console.log("Second Middleware");
-  // next();
-  res.send("User Response from Second Middleware");
-  // next();
+app.get('/users',(req,res,next)=>{
+  res.send('User list sent');
+});
+
+app.get('/admin/getAllData',(req,res,next)=>{
+  res.send("User Data sent")
+ 
+});
+
+app.get('/admin/deleteAllData',(req,res,next)=>{
+  res.send('User data deleted')
 });
 
 
