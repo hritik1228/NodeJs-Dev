@@ -5,7 +5,8 @@ const User = require('./models/user');
 
 const app = express(); 
 
-app.use(express.json()); // Middleware to parse JSON body
+// Middleware to parse JSON body
+app.use(express.json()); 
 
 // Signup API - POST /signup - create a new user
 app.post('/signup',async(req,res)=>{
@@ -70,6 +71,28 @@ try{
     res.status(400).send('Error in fetching user data');
   }
 });
+
+// findOne() is used with duplicate email documents in the database, MongoDB will return the first matching document it finds based on the collection's internal document ordering.
+app.get('/userduplicate',async(req,res)=>{
+  const userEmail = req.body.emailId;
+
+  console.log('EmailId received :',userEmail);
+  
+  try{
+    const user = await User.findOne({emailId:userEmail});
+    if(user.length === 0){
+      return res.status(404).send('User not found');
+    }
+    else{
+      res.send(user);
+    }
+  }
+  catch(err){
+    res.status(400).send('Error in fetching user data');
+  }
+
+})
+
 
 // Connect to the database before starting the server
 // Call connectDB function and connect to the database before starting appliaication server
