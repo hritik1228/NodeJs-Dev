@@ -4,6 +4,7 @@ const connectDB = require('./config/database');
 const app = express(); 
 
 // Connect to the database before starting the server
+// Call connectDB function and connect to the database before starting appliaication server
 connectDB()
     .then(()=>{
         console.log('Database connected successfully');
