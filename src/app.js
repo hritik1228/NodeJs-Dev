@@ -7,6 +7,7 @@ const app = express();
 
 app.use(express.json()); // Middleware to parse JSON body
 
+// Signup API - POST /signup - create a new user
 app.post('/signup',async(req,res)=>{
 
   // undefined because we have not added middleware to parse JSON body
@@ -32,6 +33,43 @@ app.post('/signup',async(req,res)=>{
   }
 
 })
+
+// Get User API - GET /user - get user by emailId
+app.get('/user',async(req,res)=>{
+  const userEmail = req.body.emailId;
+
+  console.log('EmailId received :',userEmail);
+  
+  try{
+    const user = await User.find({emailId:userEmail});
+    if(user.length === 0){
+      return res.status(404).send('User not found');
+    }
+    else{
+      res.send(user);
+    }
+  }
+  catch(err){
+    res.status(400).send('Error in fetching user data');
+  }
+
+})
+
+// Feed API - GET /feed - get all the users from the database
+app.get('/feed',async(req,res)=>{
+try{
+    const user = await User.find({});
+    if(user.length === 0){
+      return res.status(404).send('User not found');
+    }
+    else{
+      res.send(user);
+    }
+  }
+  catch(err){
+    res.status(400).send('Error in fetching user data');
+  }
+});
 
 // Connect to the database before starting the server
 // Call connectDB function and connect to the database before starting appliaication server
