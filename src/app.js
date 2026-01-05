@@ -93,6 +93,18 @@ app.get('/userduplicate',async(req,res)=>{
 
 })
 
+app.delete('/deleteUser',async(req,res)=>{
+  const userId = req.body.userId;
+  try{
+    // const deletedUser = await User.findByIdAndDelete({_id:userId});
+    const deletedUser = await User.findByIdAndDelete(userId);
+    res.send('User deleted successfully');
+  }
+  catch(err){
+    res.status(400).send('Error in deleting user');
+  }
+});
+
 
 // Connect to the database before starting the server
 // Call connectDB function and connect to the database before starting appliaication server
