@@ -105,6 +105,23 @@ app.delete('/deleteUser',async(req,res)=>{
   }
 });
 
+// Any data not present in User model schema will not be added to the database
+// Update user API - PATCH /updateUser - update user by userId
+app.patch('/updateUser',async(req,res)=>{
+  const userId = req.body.userId;
+  const data = req.body;
+  
+  try{
+    const deletedUser = await User.findByIdAndUpdate({_id:userId},data, {returnDocument:'after'});
+    console.log(deletedUser);
+    res.send('User updated successfully');
+  }
+  catch(err){
+    res.status(400).send('Error in updating user');
+  }
+});
+
+
 
 // Connect to the database before starting the server
 // Call connectDB function and connect to the database before starting appliaication server
