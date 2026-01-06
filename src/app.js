@@ -108,17 +108,36 @@ app.delete('/deleteUser',async(req,res)=>{
 // Any data not present in User model schema will not be added to the database
 // Update user API - PATCH /updateUser - update user by userId
 // runValidators:true -> to run the validators defined in the schema while updating
-app.patch('/updateUser',async(req,res)=>{
-  const userId = req.body.userId;
+app.patch('/updateUser/:userId',async(req,res)=>{
+  const userId = req.params?.userId;
   const data = req.body;
+
+  console.log('UserId received :',userId);
   
   try{
-    const deletedUser = await User.findByIdAndUpdate({_id:userId},data, {returnDocument:'after', runValidators:true});
-    console.log(deletedUser);
+    const ALLOWED_UPDATES = [
+      "photoUrl","about","gender","age","skills"
+    ]
+    
+    const isUpdateAllowed = Object.keys(data).every((key)=>{
+      ALLOWED_UPDATES.includes(key);
+    });
+
+    if(isUpdateAllowed){
+      console.log('Update not allowed');
+      throw new Error('Update not allowed');
+    }
+
+    if(data?.skills.length>10){
+      throw new Error('Skills cannot be more than 10');
+    }
+
+    const updatedUser = await User.findByIdAndUpdate({_id:userId},data, {returnDocument:'after', runValidators:true});
+    console.log(updatedUser);
     res.send('User updated successfully');
   }
   catch(err){
-    res.status(400).send('Error in updating user');
+    res.status(400).send('Error in updating user',err.message);
   }
 });
 
