@@ -3,11 +3,14 @@ const connectDB = require('./config/database');
 const User = require('./models/user');
 const {validationSignUpData} = require('./utils/validation');
 const bcrypt = require('bcrypt');
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
 
 const app = express(); 
 
 // Middleware to parse JSON body
-app.use(express.json()); 
+app.use(express.json());
+app.use(cookieParser()); 
 
 // Signup API - POST /signup - create a new user
 app.post('/signup',async(req,res)=>{
@@ -62,12 +65,52 @@ app.post('/login',async(req,res)=>{
     const isPasswordValid =  await bcrypt.compare(password, user.password);
     
     if(isPasswordValid){
+
+      // Creata a JWT Token 
+      const token = await jwt.sign({_id:user._id},"DEV@Hritik");
+      // console.log(token);
+
+      // Add the token to cookie and send the response back to the user
+      // res.cookie('token',token)
       res.send('User logged in successfully');
     }
     else{
       throw new Error('Password is incorrect');
     }
+  }
+  catch(err){
+    res.status(400).send('ERROR:' + err.message);
+  }
+});
 
+app.get('/profile',async(req,res)=>{
+  try{
+    // Get the token from the cookie
+    const cookies = req.cookies; 
+
+    const {token}=cookies;
+
+    if(!token){
+      throw new Error('Invalid token');
+    }
+
+    // validate my token
+
+    const decodedMessage = await jwt.verify(token,"DEV@Hritik");
+    // console.log(decodedMessage);
+    const {_id} = decodedMessage;
+
+    // console.log("Logged in user is:" + _id);
+
+    const user = await User.findById(_id);
+
+    if(!user){
+      throw new Error('User not found');
+    }
+
+    res.send(user);
+
+    // console.log(cookies)
   }
   catch(err){
     res.status(400).send('ERROR:' + err.message);
