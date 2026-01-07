@@ -5,6 +5,7 @@ const {validationSignUpData} = require('./utils/validation');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const {userAuth} = require('./middlewares/auth');
 
 const app = express(); 
 
@@ -67,11 +68,11 @@ app.post('/login',async(req,res)=>{
     if(isPasswordValid){
 
       // Creata a JWT Token 
-      const token = await jwt.sign({_id:user._id},"DEV@Hritik");
+      const token = await jwt.sign({_id:user._id},"DEV@Hritik",{expiresIn:'1d'});
       // console.log(token);
 
       // Add the token to cookie and send the response back to the user
-      // res.cookie('token',token)
+      // res.cookie('token',token,{expires: new Date(Date.now() + 8 * 3600000)});
       res.send('User logged in successfully');
     }
     else{
@@ -83,34 +84,22 @@ app.post('/login',async(req,res)=>{
   }
 });
 
-app.get('/profile',async(req,res)=>{
+app.get('/profile',userAuth, async(req,res)=>{
   try{
-    // Get the token from the cookie
-    const cookies = req.cookies; 
-
-    const {token}=cookies;
-
-    if(!token){
-      throw new Error('Invalid token');
-    }
-
-    // validate my token
-
-    const decodedMessage = await jwt.verify(token,"DEV@Hritik");
-    // console.log(decodedMessage);
-    const {_id} = decodedMessage;
-
-    // console.log("Logged in user is:" + _id);
-
-    const user = await User.findById(_id);
-
-    if(!user){
-      throw new Error('User not found');
-    }
-
+    const user = req.user;
     res.send(user);
+  }
+  catch(err){
+    res.status(400).send('ERROR:' + err.message);
+  }
+});
 
-    // console.log(cookies)
+app.post('/sendConnectionRequest', userAuth, async(req,res)=>{
+  try{
+    const fromUser = req.user;
+    console.log("Sending a connection request");
+
+    res.send(fromUser.firstName + ' sent the connection request!!' );
   }
   catch(err){
     res.status(400).send('ERROR:' + err.message);
