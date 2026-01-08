@@ -33,6 +33,7 @@ authRouter.post('/signup',async(req,res)=>{
 
 });
 
+// Login API - POST /login - login an existing user
 authRouter.post('/login',async(req,res)=>{
   try{
     const {emailId, password} = req.body;
@@ -62,5 +63,18 @@ authRouter.post('/login',async(req,res)=>{
     res.status(400).send('ERROR:' + err.message);
   }
 }); 
+
+// Logout API - POST /logout - logout an existing user
+authRouter.post('/logout',async(req,res)=>{
+    try{
+        res.cookie('token',null,{expires: new Date(Date.now())});
+        // res.clearCookie('token');
+        res.send('User logged out successfully');
+    }
+    catch(err){
+        res.status(400).send('ERROR:' + err.message);
+    }
+});
+
 
 module.exports = authRouter;
