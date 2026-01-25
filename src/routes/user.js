@@ -6,7 +6,7 @@ const userRouter = express.Router();
 
 // Get all the pending connections request for the loggedIn user
 
-userRouter.get("/user/requests", 
+userRouter.get("/user/requests/received", 
     userAuth, 
     async(req,res)=>{
 
