@@ -12,10 +12,12 @@ app.use(cookieParser());
 const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
 const requestsRouter = require('./routes/requests');
+const userRouter = require("./routes/user");
 
 app.use('/', authRouter);
 app.use('/', profileRouter);
 app.use('/', requestsRouter);
+app.use('/', userRouter);
 
 // Connect to the database before starting the server
 // Call connectDB function and connect to the database before starting appliaication server
